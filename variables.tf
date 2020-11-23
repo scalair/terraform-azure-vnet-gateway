@@ -45,10 +45,12 @@ variable "client_address_space" {
 
 variable "client_root_certificates" {
   type = map(string)
+  default = {}
 }
 
 variable "client_revoked_certificates" {
   type = map(string)
+  default = {}
 }
 
 variable "client_protocols" {
