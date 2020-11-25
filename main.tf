@@ -3,7 +3,7 @@ data "azurerm_resource_group" "this" {
 }
 
 module "pubip" {
-  source = "github.com/scalair/terraform-azure-public-ip?ref=v0.0.1"
+  source = "github.com/scalair/terraform-azure-public-ip?ref=v0.1.0"
 
   name                = "pubip-${var.name}"
   location            = data.azurerm_resource_group.this.location
