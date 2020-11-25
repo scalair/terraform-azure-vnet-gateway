@@ -50,11 +50,12 @@ resource "azurerm_local_network_gateway" "this" {
   gateway_fqdn        = each.value.gateway_fqdn
   address_space       = each.value.address_space
 
-  enable_bgp = each.value.bgp_asn != ""
   dynamic bgp_settings {
     for_each = each.value.bgp_asn != "" ? ["present"] : []
     content {
       asn = each.value.bgp_asn
+      bgp_peering_address = each.value.bgp_peering_address
+      peer_weight = each.value.peer_weight
     }
   }
 
@@ -70,7 +71,7 @@ resource "azurerm_virtual_network_gateway_connection" "this" {
   
   type                       = "IPsec"
   virtual_network_gateway_id = azurerm_virtual_network_gateway.this.id
-  local_network_gateway_id   = azurerm_local_network_gateway[each.key].this.id
+  local_network_gateway_id   = azurerm_local_network_gateway.this[each.key].id
   
   enable_bgp                 = each.value.bgp_asn != ""
 
