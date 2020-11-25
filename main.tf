@@ -6,7 +6,6 @@ module "pubip" {
   source = "github.com/scalair/terraform-azure-public-ip?ref=v0.1.0"
 
   name                = "pubip-${var.name}"
-  location            = data.azurerm_resource_group.this.location
   resource_group_name = data.azurerm_resource_group.this.name
   sku                 = var.public_ip_sku
   allocation_method   = "Dynamic"
