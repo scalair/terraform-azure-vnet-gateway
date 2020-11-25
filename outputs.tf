@@ -13,3 +13,7 @@ output "public_ip_address" {
 output "public_ip_fqdn" {
     value = module.pubip.fqdn
 }
+
+output "local_network_gateways" {
+    value = azurerm_local_network_gateway.this
+}

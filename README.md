@@ -2,36 +2,33 @@
 
 This module creates a VNet gateway with an associated public IP.
 
+More details [here](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/virtual_network_gateway).
+
 ## Usage example
 
 ```hcl
-module "aks" {
+module "vnet_gateway" {
   source = "github.com/scalair/terraform-azure-vnet-gateway"
 
   name                = "gw_name"
-  location            = "francecentral"
   resource_group_name = "rg_name"
-
   sku        = "VpnGw1"
   generation = "Generation1"
 
-  subnet_id = "/subnet/id"
-  private_ip_address_allocation = "Dynamic"
-
   public_ip_sku = "Basic"
-  public_ip_allocation_method = "Dynamic"
+  subnet_id = "/subnet/id"
 
-  client_address_space = ["10.10.0.0/22"]
+  bgp_asn = "65515" // Set this to enable bgp
 
-  client_root_certificates = {
-    "DigiCert-Federated-ID-Root-CA" = "MIID......Qqk=" // Base-64 encoded X.509
-  }
-
-  client_revoked_certificates = {
-    "Verizon-Global-Root-CA" = "9121......49B1" // SHA1 thumbprint
-  }
-
-  client_protocols = ["SSTP", "IkeV2", "OpenVPN"]
+  local_gateways = [
+    {
+      name            = "local_site_1",
+      gateway_address = "12.13.14.15",
+      address_space   = "10.0.0.0/16",
+      shared_key      = "4-v3ry-53cr37-1p53c-5h4r3d-k3y",
+      bgp_asn         = "65515" // Set this to enable bgp
+    }
+  ]
 
   tags = {}
 }
@@ -40,7 +37,6 @@ module "aks" {
 ## What is not (yet) implemented
 
 - P2S connection
-- BGP support
 - Active/Active mode
 - RADIUS Authentication
 - ExpressRoute type
