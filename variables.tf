@@ -2,10 +2,6 @@ variable "name" {
   type = string
 }
 
-variable "location" {
-  type = string
-}
-
 variable "resource_group_name" {
   type = string
 }
@@ -20,18 +16,13 @@ variable "generation" {
   default = "Generation1"
 }
 
-variable "private_ip_address_allocation" {
+variable "bgp_asn" {
   type    = string
-  default = "Dynamic"
+  default = ""
 }
 
 variable "subnet_id" {
   type = string
-}
-
-variable "public_ip_allocation_method" {
-  type    = string
-  default = "Dynamic"
 }
 
 variable "public_ip_sku" {
@@ -39,23 +30,9 @@ variable "public_ip_sku" {
   default = "Basic"
 }
 
-variable "client_address_space" {
-  type = list(string)
-}
-
-variable "client_root_certificates" {
-  type = map(string)
-  default = {}
-}
-
-variable "client_revoked_certificates" {
-  type = map(string)
-  default = {}
-}
-
-variable "client_protocols" {
-  type    = list(string)
-  default = ["SSTP", "IkeV2", "OpenVPN"]
+variable "local_gateways" {
+  type    = list
+  default = []
 }
 
 variable "tags" {
