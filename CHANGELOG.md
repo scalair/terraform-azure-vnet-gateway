@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.1.2 - 2020-11-26
+
+## Fixed
+
+- Remove unsupported `location` from `public_ip` module
+
 ## v1.1.1 - 2020-11-26
 
 ## Fixed
