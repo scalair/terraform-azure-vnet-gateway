@@ -3,7 +3,7 @@ data "azurerm_resource_group" "this" {
 }
 
 module "pubip" {
-  source = "github.com/scalair/terraform-azure-public-ip?ref=v0.1.0"
+  source = "github.com/scalair/terraform-azure-public-ip?ref=v0.2.0"
 
   name                = "pubip-${var.name}"
   resource_group_name = data.azurerm_resource_group.this.name
@@ -47,15 +47,14 @@ resource "azurerm_local_network_gateway" "this" {
   location            = data.azurerm_resource_group.this.location
   resource_group_name = data.azurerm_resource_group.this.name
   gateway_address     = each.value.gateway_address
-  gateway_fqdn        = each.value.gateway_fqdn
   address_space       = each.value.address_space
 
   dynamic bgp_settings {
-    for_each = each.value.bgp_asn != "" ? ["present"] : []
+    for_each = lookup(each.value, "bgp_asn", "") != "" ? ["present"] : []
     content {
-      asn = each.value.bgp_asn
-      bgp_peering_address = each.value.bgp_peering_address
-      peer_weight = each.value.peer_weight
+      asn                 = lookup(each.value, "bgp_asn", null)
+      bgp_peering_address = lookup(each.value, "bgp_peering_address", null)
+      peer_weight         = lookup(each.value, "bgp_peer_weight", null)
     }
   }
 
@@ -73,12 +72,12 @@ resource "azurerm_virtual_network_gateway_connection" "this" {
   virtual_network_gateway_id = azurerm_virtual_network_gateway.this.id
   local_network_gateway_id   = azurerm_local_network_gateway.this[each.key].id
   
-  enable_bgp                 = each.value.bgp_asn != ""
+  enable_bgp                 = lookup(each.value, "bgp_asn", null)
 
-  shared_key = each.value.shared_key
+  shared_key = lookup(each.value, "shared_key", null)
 
   dynamic ipsec_policy {
-    for_each = each.value.ipsec_policy
+    for_each = lookup(each.value, "ipsec_policy", [])
 
     content {
       dh_group         = ipsec_policy.value.dh_group
