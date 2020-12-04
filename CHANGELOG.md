@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.1.4 - 2020-12-04
+
+## Fixed
+
+- Fix optional variables
+
 ## v1.1.3 - 2020-11-26
 
 ## Fixed
